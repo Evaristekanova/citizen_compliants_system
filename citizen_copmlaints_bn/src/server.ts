@@ -1,0 +1,27 @@
+import * as express from "express";
+import { Request, Response } from "express";
+import { AppDataSource } from "./database/data-source";
+
+// Initialize the database connection
+AppDataSource.initialize()
+  .then(() => {
+    // Create Express application
+    const app = express.default();
+
+    // Middleware for parsing JSON request bodies
+    app.use(express.default.json());
+
+    // Root route
+    app.get("/", (_req: Request, res: Response) => {
+      res.json("Established connection!");
+    });
+
+    // Start server
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error during Data Source initialization:", error);
+  });
