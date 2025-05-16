@@ -22,6 +22,7 @@ export class UserController {
   static async update(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     const updated = await UserService.update(id, req.body);
+
     if (!updated) return res.status(404).json({ message: "User not found" });
     res.json(updated);
   }

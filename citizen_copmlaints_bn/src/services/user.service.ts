@@ -21,7 +21,9 @@ export class UserService {
   static async update(id: number, data: Partial<User>) {
     const user = await userRepo.findOneBy({ id });
     if (!user) return null;
-
+  if (data.password) {
+    data.password = await hashPassword(data.password);
+  }
     userRepo.merge(user, data);
     return await userRepo.save(user);
   }
