@@ -1,5 +1,5 @@
-import { AppDataSource } from "../../database/data-source";
-import { Status } from "../../database/entities/status.entity";
+import { AppDataSource } from "../database/data-source";
+import { Status } from "../database/entities/status.entity";
 
 export class StatusService {
   private static statusRepository = AppDataSource.getRepository(Status);

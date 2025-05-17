@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AppDataSource } from "../../database/data-source";
-import { Agency } from "../../database/entities/agency.entity";
+import { AppDataSource } from "../database/data-source";
+import { Agency } from "../database/entities/agency.entity";
 
 export class AgencyService {
   private static agencyRepository = AppDataSource.getRepository(Agency);

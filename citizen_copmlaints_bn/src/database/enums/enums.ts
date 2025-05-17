@@ -7,6 +7,8 @@ export enum ComplaintStatus {
 
 export enum UserType {
   CITIZEN="Citizen",
-  AGENT = "Agent",
+  AGENT = "Staff",
   ADMIN = "Admin",
+  SUPER_ADMIN = "SuperAdmin",
+  AGENCY_ADMIN = "AgencyAdmin",
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { sign } from "jsonwebtoken";
 import { AppDataSource } from "../database/data-source";
 import { User } from "../database/entities/user.entity";
@@ -40,17 +41,24 @@ export class UserService {
     return result.affected ? true : false;
   }
 
-  static async login(email: string, password: string) {
+  static async login(email: string, plainPassword: string) {
     const user = await userRepo.findOne({
       where: { email },
-      select: ["user_id", "firstName", "lastName", "email", "password"],
+      select: [
+        "user_id",
+        "firstName",
+        "lastName",
+        "email",
+        "user_type",
+        "password",
+      ],
     });
 
     if (!user) {
       return { error: "Invalid email or password" };
     }
     console.log("User found:", user);
-    const isPasswordValid = await verifyPassword(password, user.password);
+    const isPasswordValid = await verifyPassword(plainPassword, user.password);
     if (!isPasswordValid) {
       return { error: "Invalid email or password" };
     }
@@ -59,6 +67,7 @@ export class UserService {
       { user_id: user.user_id, name: user.lastName, email: user.email },
       process.env.JWT_SECRET!
     );
-    return { token };
+    const { password, ...userWithoutPassword } = user;
+    return { token: token, user: { ...userWithoutPassword } };
   }
 }

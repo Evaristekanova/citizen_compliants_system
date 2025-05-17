@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { Request, Response } from "express";
 import { AppDataSource } from "./database/data-source";
 import userRoutes from "./routes/user.routes";
@@ -9,21 +10,24 @@ import { errorHandler } from "./middleswares/errorHandler.middleware";
 import complaintRoutes from "./routes/complaint.routes";
 import complaintsResponseRoutes from "./routes/complaintsResponse.routes";
 import { UserController } from "./controllers/user.controller";
-import { authenticate } from "./middleswares/auth.middleware";
 
 // Initialize the database connection
 AppDataSource.initialize()
   .then(() => {
-    // Create Express application
     const app = express();
 
-    // Middleware for parsing JSON request bodies
+    app.use(
+      cors({
+        origin: "*",
+      })
+    );
+
+    // JSON parser
     app.use(express.json());
 
-    // CUSTOM ROUTES
-    app.use(errorHandler);
+    // Routes
     app.post("/auth/login", UserController.login);
-    app.use("/users", authenticate, userRoutes);
+    app.use("/users", userRoutes);
     app.use("/categories", categoryRoutes);
     app.use("/agencies", agencyRoutes);
     app.use("/statuses", statusRoutes);
@@ -35,8 +39,10 @@ AppDataSource.initialize()
       res.json("Established connection!");
     });
 
-    // Start server
-    const port = process.env.PORT || 3000;
+    // ✅ Apply error handler after all routes
+    app.use(errorHandler);
+
+    const port = process.env.PORT || 4000;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
