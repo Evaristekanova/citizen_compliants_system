@@ -5,29 +5,37 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { UserType } from "../enums/enums";
 
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  user_id: number;
 
-  @Column({ length: 100 })
+  @Column()
   firstName: string;
 
-  @Column({ length: 100 })
+  @Column()
   lastName: string;
 
   @Column({ unique: true })
   email: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({
+    type: "enum",
+    enum: UserType,
+  })
+  user_type: UserType;
+
   @Column({ select: false, nullable: false })
   password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
-
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }
